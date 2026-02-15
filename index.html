@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#667eea">
+    <meta name="description" content="日本円と米ドルで管理できる予算管理アプリ">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="予算管理">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="stylesheet" href="style.css">
+    <title>予算管理アプリ</title>
+</head>
+<body>
+    <div class="offline-indicator" id="offlineIndicator">📡 オフラインモード</div>
+    
+    <div class="container">
+        <div class="install-prompt" id="installPrompt">
+            <span>📱 このアプリをホーム画面に追加してオフラインで使用できます</span>
+            <div>
+                <button class="install-btn" id="installBtn">インストール</button>
+                <button class="close-install" onclick="closeInstallPrompt()">×</button>
+            </div>
+        </div>
+        
+        <h1>💰 予算管理アプリ</h1>
+
+        <!-- 日付選択 -->
+        <div class="section">
+            <div class="section-title">📅 日付選択</div>
+            <div class="input-group">
+                <input type="date" id="dateSelector" onchange="changeDate()">
+            </div>
+            <div style="text-align: center; margin-top: 10px; color: #667eea; font-weight: 600;" id="selectedDateDisplay"></div>
+        </div>
+
+        <!-- 為替レート設定 -->
+        <div class="section">
+            <div class="section-title">為替レート設定</div>
+            <div class="input-group">
+                <label>1 USD = ? JPY</label>
+                <input type="number" id="exchangeRate" step="0.01" placeholder="例: 150.50">
+            </div>
+            <button class="btn" onclick="saveRate()">レートを保存</button>
+            <div id="rateDisplay" class="rate-display" style="display:none; margin-top:15px;"></div>
+        </div>
+
+        <!-- 予算設定 -->
+        <div class="section">
+            <div class="section-title">今日の予算設定</div>
+            <div class="currency-toggle">
+                <button class="currency-btn active" id="jpyBtn" onclick="selectCurrency('JPY')">¥ 日本円</button>
+                <button class="currency-btn" id="usdBtn" onclick="selectCurrency('USD')">$ 米ドル</button>
+            </div>
+            <div class="input-group">
+                <label id="budgetLabel">予算金額 (JPY)</label>
+                <input type="number" id="budgetAmount" step="0.01" placeholder="例: 5000">
+            </div>
+            <button class="btn" onclick="saveBudget()">予算を設定</button>
+        </div>
+
+        <!-- 予算表示 -->
+        <div id="budgetDisplaySection" style="display:none;">
+            <div class="budget-display">
+                <div style="font-size: 14px; opacity: 0.9;">今日の予算</div>
+                <div class="budget-amount" id="budgetJPY">¥0</div>
+                <div class="budget-conversion" id="budgetUSD">$0.00</div>
+                <div class="remaining">
+                    <div>残り予算</div>
+                    <div style="font-size: 20px; font-weight: 700; margin-top: 5px;" id="remainingAmount">¥0 / $0.00</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 支出記録 -->
+        <div class="section">
+            <div class="section-title">支出を記録</div>
+            <div class="currency-toggle">
+                <button class="currency-btn" id="expenseJpyBtn" onclick="selectExpenseCurrency('JPY')">¥ 日本円</button>
+                <button class="currency-btn active" id="expenseUsdBtn" onclick="selectExpenseCurrency('USD')">$ 米ドル</button>
+            </div>
+            <div class="input-group">
+                <label id="expenseAmountLabel">金額 (USD)</label>
+                <input type="number" id="expenseAmount" step="0.01" placeholder="例: 10.50">
+            </div>
+            <div class="input-group">
+                <label>内容</label>
+                <input type="text" id="expenseDescription" placeholder="例: ランチ">
+            </div>
+            <button class="btn btn-secondary" onclick="addExpense()">支出を追加</button>
+        </div>
+
+        <!-- 支出リスト -->
+        <div class="section">
+            <div class="section-title">今日の支出</div>
+            <div id="expenseList" class="expense-list">
+                <div class="empty-state">まだ支出がありません</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
